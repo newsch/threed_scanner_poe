@@ -38,6 +38,7 @@ while(True):
 
 
 print(data)
-
-np.savetxt("scan"+ str(int(time.time())) +".csv", data, delimiter=",")
+filename = "scan"+ str(int(time.time())) +".csv"
+print("saving to", filename)
+np.savetxt(filename, data, delimiter=",", fmt='%i')
 print('done')
