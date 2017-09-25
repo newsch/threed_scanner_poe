@@ -15,14 +15,14 @@
 
 int cur_state = STOP;
 
-const int x_servo_pin = 9;
-const int y_servo_pin = 10;
+const int x_servo_pin = 5;
+const int y_servo_pin = 6;
 const int ir_sensor_pin = A0;
 
 int servo_pos[2] = { 0, 0 };
 int servo_dir = 1; // 1 or -1 for right or left
-const int servo_min[2] = { 45, 45 };
-const int servo_max[2] = { 135, 135 };
+const int servo_min[2] = { 0, 75 };
+const int servo_max[2] = { 70, 120 };
 Servo x_servo;
 Servo y_servo;
 
@@ -35,7 +35,8 @@ void setup()
 {
   x_servo.attach(x_servo_pin);
   y_servo.attach(y_servo_pin);
-  Serial.begin(9600);
+
+  Serial.begin(100000);
   Serial.println("Begin");
 }
 
@@ -55,8 +56,10 @@ void loop()
         previous_ms = current_ms;
 
         // Read sensor and send data
-        Serial.print(x_servo.read() + "\t");
-        Serial.print(y_servo.read() + "\t");
+        Serial.print(x_servo.read());
+        Serial.print(" ");
+        Serial.print(y_servo.read());
+        Serial.print(" ");
         Serial.println(analogRead(ir_sensor_pin));
 
         // Move servos
@@ -85,18 +88,29 @@ void loop()
       // Reset the scanner
       Serial.println("Stopping...");
       x_servo.write(90);
+      y_servo.write(90);
       cur_state = STOPPED;
-      Serial.println("Stopped");
+      Serial.println("*** Stopped ***");
       break;
 
     case START:
+      Serial.println("*** Starting ***");
+      Serial.print(servo_min[0]);
+      Serial.print(" ");
+      Serial.print(servo_min[1]);
+      Serial.print(" ");
+      Serial.print(servo_max[0]);
+      Serial.print(" ");
+      Serial.print(servo_max[1]);
       // Init scanning
-      servo_pos = servo_min;
+      memcpy(servo_pos, servo_min, sizeof servo_min);
+      servo_dir = 1;
+
       x_servo.write(servo_pos[0]);
       y_servo.write(servo_pos[1]);
-      
+
       // wait for servos to move to start
-      sleep(500);
+      delay(500);
 
       cur_state = RUNNING;
       break;
