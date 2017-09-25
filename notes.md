@@ -45,3 +45,9 @@ Tried a low-pass filter before the arduino, at 30hz it was effective.
 I need to try a by-pass cap between Vin and GND of the IR sensor (10uF or more recommended)
 
 # Serial
+
+
+# Scan
+It only works scanning in one direction, otherwise the rows get get aliased
+
+Some noise exists, in squigly lines
