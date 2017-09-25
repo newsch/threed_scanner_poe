@@ -20,8 +20,10 @@ const int y_servo_pin = 6;
 const int ir_sensor_pin = A0;
 
 int servo_pos[2] = { 0, 0 };
-const int servo_min[2] = { 30, 85 };
-const int servo_max[2] = { 70, 100 };
+const int x_range = 30;
+const int y_range = 15;
+const int servo_min[2] = { 90-x_range , 90-y_range };
+const int servo_max[2] = { 90+x_range , 90+y_range };
 Servo x_servo;
 Servo y_servo;
 
@@ -31,6 +33,7 @@ int cur_ms_delay = 0;
 const int x_ms_delay = 100;
 const int y_ms_delay = 400;
 
+char in_data;
 // int i = 0;
 
 void sendReadout()
@@ -74,9 +77,18 @@ void loop()
 {
   switch (cur_state) {
     case STOPPED:
-      if(Serial.read() == 's'){
+      in_data = Serial.read();
+      if(in_data == 's'){
         cur_state = START;
         break;
+      } else if(in_data == 'c'){
+        x_servo.attach(x_servo_pin);
+        y_servo.attach(y_servo_pin);
+        x_servo.write(90);
+        y_servo.write(90);
+        delay(500);
+        x_servo.detach();
+        y_servo.detach();
       }
       break;
 
