@@ -21,9 +21,9 @@ const int ir_sensor_pin = A0;
 
 int servo_pos[2] = { 0, 0 };
 int servo_dir = 1; // 1 or -1 for right or left
-const int servo_min[2] = { 0, 75 };
-const int servo_max[2] = { 10, 80 };
-// const int servo_max[2] = { 70, 120 };
+const int servo_min[2] = { 30, 85 };
+// const int servo_max[2] = { 10, 80 };
+const int servo_max[2] = { 70, 100 };
 Servo x_servo;
 Servo y_servo;
 
@@ -68,7 +68,6 @@ void loop()
         Serial.print(" ");
         Serial.print(y_servo.read());
         Serial.print(" ");
-        // Serial.println(i);
         Serial.println(analogRead(ir_sensor_pin));
 
         // If x_servo is on bounds increment y_servo
@@ -87,6 +86,8 @@ void loop()
             break;
           }
           i++;
+
+          delay(500);
 
           // Read sensor and send data
           Serial.print(x_servo.read());
